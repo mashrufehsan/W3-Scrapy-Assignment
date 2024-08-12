@@ -25,7 +25,7 @@ class PickleType(TypeDecorator):
         return None
 
 # Define the PostgreSQL database URL
-DATABASE_URL = 'postgresql://postgres:admin@localhost/scrapy_hotels'
+DATABASE_URL = 'postgresql://postgres:p%40stgress@localhost:5433/scrapy_hotels'
 
 # Create the SQLAlchemy engine
 engine = create_engine(DATABASE_URL)

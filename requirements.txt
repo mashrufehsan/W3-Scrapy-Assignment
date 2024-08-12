@@ -1,0 +1,4 @@
+scrapy
+requests
+SQLAlchemy
+psycopg2-binary
