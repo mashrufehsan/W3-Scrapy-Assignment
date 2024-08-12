@@ -37,7 +37,7 @@ This project is a web scraper for extracting hotel information from the Trip.com
 6. **Run the application:**
     ```bash
     cd trip_com_scraper
-    scrapy crawls trip_hotels
+    scrapy crawl trip_hotels
     ```
 
 ## Notes
