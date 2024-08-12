@@ -9,23 +9,19 @@ from sqlalchemy.types import TypeDecorator
 import requests
 import os
 import pickle
+from dotenv import load_dotenv
 
-# Define a custom type for storing lists of strings
-class PickleType(TypeDecorator):
-    impl = TEXT
+# Load environment variables from the .env file
+load_dotenv()
 
-    def process_bind_param(self, value, dialect):
-        if value is not None:
-            return pickle.dumps(value)
-        return None
+# Construct the database URL from environment variables
+DB_USER = os.getenv('DB_USER')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_HOST = os.getenv('DB_HOST')
+DB_PORT = os.getenv('DB_PORT')
+DB_NAME = os.getenv('DB_NAME')
 
-    def process_result_value(self, value, dialect):
-        if value is not None:
-            return pickle.loads(value)
-        return None
-
-# Define the PostgreSQL database URL
-DATABASE_URL = 'postgresql://postgres:p%40stgress@localhost:5433/scrapy_hotels'
+DATABASE_URL = f'postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 
 # Create the SQLAlchemy engine
 engine = create_engine(DATABASE_URL)
