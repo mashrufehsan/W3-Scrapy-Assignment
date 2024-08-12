@@ -11,6 +11,11 @@ BOT_NAME = "trip_com_scraper"
 
 LOG_LEVEL = 'INFO'
 
+ITEM_PIPELINES = {
+    'trip_com_scraper.pipelines.HotelPipeline': 300,  # Ensure to replace 'myproject' with your project name
+}
+
+
 
 SPIDER_MODULES = ["trip_com_scraper.spiders"]
 NEWSPIDER_MODULE = "trip_com_scraper.spiders"
