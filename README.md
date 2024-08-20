@@ -29,9 +29,14 @@ This project is a web scraper for extracting hotel information from the Trip.com
 5. **Configure environment variables:**
 
     Copy the .env.sample file to .env and fill in the required configuration:
-    ```bash
-    cp .env.sample .env
-    ```
+    - On macOS/Linux:
+        ```bash
+        cp .env.sample .env
+        ```
+    - On windows:
+        ```bash
+        copy .env.sample .env
+        ```
     Update the `.env` file with your PostgreSQL database credentials:
 
 6. **Run the application:**

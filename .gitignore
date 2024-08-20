@@ -2,3 +2,4 @@ venv/
 images/
 trip_com_scraper/images
 .env
+**/__pycache__/
