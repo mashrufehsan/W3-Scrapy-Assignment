@@ -39,12 +39,12 @@ class HotelPipeline:
             __tablename__ = city_name  # Set the table name dynamically and in lowercase
 
             id = Column(Integer, primary_key=True, autoincrement=True)
-            title = Column(String(100), nullable=False)
+            title = Column(String(255), nullable=False)
             rating = Column(Float, nullable=False)
-            location = Column(String(100), nullable=False)
+            location = Column(String(255), nullable=False)
             latitude = Column(Float, nullable=False)
             longitude = Column(Float, nullable=False)
-            room_type = Column(String(100), nullable=False)
+            room_type = Column(String(255), nullable=False)
             # Discount price can be null
             discount_price = Column(Float, nullable=True)
             base_price = Column(Float, nullable=True)  # Base price can be null
