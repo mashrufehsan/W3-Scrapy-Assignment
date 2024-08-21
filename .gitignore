@@ -3,3 +3,4 @@ images/
 trip_com_scraper/images
 .env
 **/__pycache__/
+trip_com_scraper/spiders/__pycache__/__init__.cpython-310.pyc

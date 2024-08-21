@@ -3,13 +3,14 @@ import requests
 from sqlalchemy import create_engine, Column, Integer, String, Float, inspect
 from sqlalchemy.orm import declarative_base, sessionmaker
 from dotenv import load_dotenv
+from urllib.parse import quote_plus
 
 # Load environment variables from the .env file
 load_dotenv()
 
 # Construct the database URL from environment variables
 DB_USER = os.getenv('DB_USER')
-DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_PASSWORD = quote_plus(os.getenv('DB_PASSWORD'))
 DB_HOST = os.getenv('DB_HOST')
 DB_PORT = os.getenv('DB_PORT')
 DB_NAME = os.getenv('DB_NAME')
@@ -22,6 +23,7 @@ engine = create_engine(DATABASE_URL)
 # Create a base class for our class definitions
 Base = declarative_base()
 
+
 class HotelPipeline:
 
     def __init__(self):
@@ -29,12 +31,13 @@ class HotelPipeline:
 
     def process_data(self, data):
         city_name = data['hotelList'][0]['positionInfo']['cityName']
-        city_name = city_name.replace(" ", "_").replace("-", "_").lower()  # Sanitize and convert to lowercase
+        city_name = city_name.replace(" ", "_").replace(
+            "-", "_").lower()  # Sanitize and convert to lowercase
 
         # Define the Hotel class dynamically
         class Hotel(Base):
             __tablename__ = city_name  # Set the table name dynamically and in lowercase
-            
+
             id = Column(Integer, primary_key=True, autoincrement=True)
             title = Column(String(100), nullable=False)
             rating = Column(Float, nullable=False)
@@ -42,10 +45,11 @@ class HotelPipeline:
             latitude = Column(Float, nullable=False)
             longitude = Column(Float, nullable=False)
             room_type = Column(String(100), nullable=False)
-            discount_price = Column(Float, nullable=True)  # Discount price can be null
+            # Discount price can be null
+            discount_price = Column(Float, nullable=True)
             base_price = Column(Float, nullable=True)  # Base price can be null
             images = Column(String, nullable=True)  # Path to the image file
-            
+
             def __repr__(self):
                 return (f"<Hotel(title={self.title}, rating={self.rating}, "
                         f"location={self.location}, latitude={self.latitude}, "
@@ -75,7 +79,8 @@ class HotelPipeline:
             room_info = hotel['roomInfo']
 
             hotel_title = hotel_info['hotelName']
-            hotel_rating = float(hotel['commentInfo']['commentScore']) if hotel['commentInfo']['commentScore'] else None
+            hotel_rating = float(
+                hotel['commentInfo']['commentScore']) if hotel['commentInfo']['commentScore'] else None
             hotel_address = hotel_info['hotelAddress']
             latitude = float(position_info['mapCoordinate'][0]['latitude'])
             longitude = float(position_info['mapCoordinate'][0]['longitude'])
@@ -85,7 +90,8 @@ class HotelPipeline:
             hotel_img = hotel_info['hotelImg']
 
             # Convert empty strings to None
-            base_price = float(origin_price) if origin_price not in [None, ''] else None
+            base_price = float(origin_price) if origin_price not in [
+                None, ''] else None
             discount_price = float(price) if price not in [None, ''] else None
 
             # Download the image and save it to the images folder
@@ -101,7 +107,8 @@ class HotelPipeline:
                         with open(image_path, 'wb') as img_file:
                             img_file.write(image_response.content)
                 except Exception as e:
-                    print(f"Failed to fetch or save image from {hotel_img}. Error: {e}")
+                    print(
+                        f"Failed to fetch or save image from {hotel_img}. Error: {e}")
 
             # Create new hotel instance
             new_hotel = Hotel(
@@ -115,7 +122,7 @@ class HotelPipeline:
                 base_price=base_price,
                 images=image_path  # Save the image path in the database
             )
-            
+
             # Add the new hotel to the session
             session.add(new_hotel)
 
